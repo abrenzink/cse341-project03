@@ -1,4 +1,5 @@
 const Word = require('../models/word');
+const Api404Error = require('../helpers/api404Error');
 
 const getAll = async (req, res) => {
     try {
@@ -10,16 +11,18 @@ const getAll = async (req, res) => {
     }
 };
 
-const getWordById = async (req, res) => {
+const getWordById = async (req, res, next) => {
     try {
         const word = await Word.findById(req.params.id);
         if(!word){
-            return res.status(404).json({message: err.message});
+            throw new Api404Error(`Word with id: ${req.params.id} not found.`);
+            // return res.status(404).json({message: 'Word not found.'});
         }
         res.status(200).json(word);
     }
     catch(err){
-        res.status(500).json({message: err.message});
+        next(err);
+        // res.status(500).json({message: err.message});
     }
 };
 
@@ -44,30 +47,43 @@ const createWord = async (req, res) => {
     }
 };
 
-const updateWord = async (req, res) => {
+const updateWord = async (req, res, next) => {
     try{
         const wordId = req.params.id;
-        const updatedWord = await Word.findByIdAndUpdate(wordId, updateData, {new: true});
+        const updatedData = {
+            name: req.body.name,
+            meaning: req.body.meaning,
+            partSpeech: req.body.partSpeech,
+            translation: req.body.translation,
+            ipa: req.body.ipa,
+            origin: req.body.origin,
+            comments: req.body.comments
+        };
+        const updatedWord = await Word.findByIdAndUpdate(wordId, updatedData, {new: true});
         if(!updatedWord){
-            return res.status(404).json({message: 'Word not found'});
+            throw new Api404Error(`Word with id: ${wordId} not found.`);
+            // return res.status(404).json({ message: 'Word not found.' });
         }
         res.status(200).json(updatedWord);
     }    
     catch (err){
-        res.status(500).json({ message: err.message });
+        // res.status(500).json({ message: err.message });
+        next(err);
     }
 };
 
-const deleteWord = async (req, res) => {
+const deleteWord = async (req, res, next) => {
     try{
-        const wordId = req.body;
+        const wordId = req.params.id;
         const deletedWord = await Word.findByIdAndRemove(wordId);
         if (!deletedWord) {
-            return res.status(404).json({ message: 'Palavra não encontrada' });
+            throw new Api404Error(`Word with id: ${wordId} not found.`);
+            // return res.status(404).json({ message: 'Word not found.'  });
         }      
-        res.status(204).send(); // Resposta de sucesso sem conteúdo
+        res.status(204).send(); 
     } catch (err) {
-        res.status(500).json({ message: err.message });
+        // res.status(500).json({ message: err.message });
+        next(err);
     }
 };
 
