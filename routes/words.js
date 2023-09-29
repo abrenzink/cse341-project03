@@ -6,12 +6,12 @@ const validation = require('../middleware/validate');
 
 router.get('/', wordsController.getAll);
 
-router.get('/:id', wordsController.getWordById);
+router.get('/:id', validation.validateId, wordsController.getWordById);
 
-router.post('/', validation.saveWord, wordsController.createWord);
+router.post('/', validation.validateWordInfo, wordsController.createWord);
 
-router.put('/:id', validation.saveWord, wordsController.updateWord);
+router.put('/:id', validation.validateWordInfo, wordsController.updateWord);
 
-router.delete('/:id', wordsController.deleteWord);
+router.delete('/:id', validation.validateId, wordsController.deleteWord);
 
 module.exports = router;

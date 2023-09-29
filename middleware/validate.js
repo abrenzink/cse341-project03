@@ -1,6 +1,7 @@
 const validator = require('../helpers/validate');
+const mongoose = require('mongoose');
 
-const saveWord = (req, res, next) => {
+const validateWordInfo = (req, res, next) => {
     const validationRule = {
         name: 'required|string',
         meaning: 'required|string',
@@ -20,6 +21,18 @@ const saveWord = (req, res, next) => {
     });
 };
 
+const validateId = (req, res, next) => {
+  const id = req.params.id;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ 
+        success: false,
+        message: 'Invalid ID.' 
+      });
+  }
+  next(); 
+};
+
 module.exports = {
-    saveWord
+  validateWordInfo,
+  validateId
 }
