@@ -9,6 +9,10 @@ dotenv.config();
 const port = process.env.PORT;
 
 app.use(bodyParser.json())
+    .use((req, res, next) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        next();
+    })
     .use('/', require('./routes'))
     .use(logError)
     .use(returnError);

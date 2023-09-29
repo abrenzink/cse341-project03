@@ -2,6 +2,7 @@ const Word = require('../models/word');
 const Api404Error = require('../helpers/api404Error');
 
 const getAll = async (req, res) => {
+    //#swagger.tags=['Words']
     try {
         const words = await Word.find();
         res.status(200).json(words);
@@ -12,6 +13,7 @@ const getAll = async (req, res) => {
 };
 
 const getWordById = async (req, res, next) => {
+    //#swagger.tags=['Words']
     try {
         const word = await Word.findById(req.params.id);
         if(!word){
@@ -27,6 +29,7 @@ const getWordById = async (req, res, next) => {
 };
 
 const createWord = async (req, res) => {
+    //#swagger.tags=['Words']
     const { name, meaning, partSpeech, translation, ipa, origin, comments } = req.body;
     try{
         const newWord = new Word ({
@@ -48,6 +51,7 @@ const createWord = async (req, res) => {
 };
 
 const updateWord = async (req, res, next) => {
+    //#swagger.tags=['Words']
     try{
         const wordId = req.params.id;
         const updatedData = {
@@ -73,6 +77,7 @@ const updateWord = async (req, res, next) => {
 };
 
 const deleteWord = async (req, res, next) => {
+    //#swagger.tags=['Words']
     try{
         const wordId = req.params.id;
         const deletedWord = await Word.findByIdAndRemove(wordId);
