@@ -5,11 +5,11 @@
     "description": "Aviation dictionary API",
     "version": "1.0.0"
   },
-  "host": "https://project3-5ag8.onrender.com",
+  "host": "project3-5ag8.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http",
-    "https"
+    "https",
+    "http"
   ],
   "paths": {
     "/": {
